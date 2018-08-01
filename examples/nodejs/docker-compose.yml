@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    environment:
+      VIRTUAL_HOST: v.io
+    volumes:
+      - /srv/nginx-vhost/v.io:/nginx
+    expose:
+      - 3000
+  nginx:
+    build:
+      context: ../..
+    ports:
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /srv/nginx-vhost:/vhost:ro

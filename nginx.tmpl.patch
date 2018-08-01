@@ -1,0 +1,11 @@
+  root /vhost/{{ trim $host }}/static;
+
+  location / {
+    try_files $uri @serve;
+  }
+
+  {{ if (exists (printf "/vhost/%s/conf" $host)) }}
+  include {{ printf "/vhost/%s/conf" $host }};
+  {{ end }}
+
+  location @serve {

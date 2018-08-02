@@ -1,0 +1,42 @@
+version: '3'
+
+networks:
+  nginx-proxy:
+    external: true
+
+volumes:
+  nginx-certs:
+  nginx-vhost:
+  nginx-html:
+
+services:
+  nginx:
+    # image: jwilder/nginx-proxy:alpine
+    build: ../..
+    restart: always
+    ports:
+      - 880:80
+      - 8443:443
+    logging:
+      driver: journald
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - nginx-vhost:/etc/nginx/vhost.d
+      - nginx-certs:/etc/nginx/certs:ro
+      - nginx-html:/usr/share/nginx/html:ro
+      - /srv:/srv:ro
+    labels:
+      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
+    networks:
+      - nginx-proxy
+
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - nginx-vhost:/etc/nginx/vhost.d
+      - nginx-certs:/etc/nginx/certs
+      - nginx-html:/usr/share/nginx/html
+    depends_on:
+      - nginx

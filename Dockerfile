@@ -7,4 +7,4 @@ FROM jwilder/nginx-proxy:alpine
 # patch by sed https://unix.stackexchange.com/a/49438
 COPY nginx.tmpl.patch /app/nginx.tmpl.patch
 RUN sed -i -e '/location \/ {/{r nginx.tmpl.patch' -e 'd}' /app/nginx.tmpl
-VOLUME /vhost
+VOLUME /srv

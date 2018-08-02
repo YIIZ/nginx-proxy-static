@@ -1,11 +1,15 @@
-  root /vhost/{{ trim $host }}/static;
+  root /srv/{{ trim $host }}/static;
 
+
+  {{ if (exists (printf "/srv/%s/overwrite.conf" $host)) }}
+  include {{ printf "/srv/%s/overwrite.conf" $host }};
+  {{ else }}
   location / {
     try_files $uri @serve;
   }
-
-  {{ if (exists (printf "/vhost/%s/conf" $host)) }}
-  include {{ printf "/vhost/%s/conf" $host }};
+  {{ if (exists (printf "/srv/%s/conf" $host)) }}
+  include {{ printf "/srv/%s/conf" $host }};
+  {{ end }}
   {{ end }}
 
   location @serve {

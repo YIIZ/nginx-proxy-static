@@ -11,14 +11,11 @@ volumes:
 
 services:
   nginx:
-    # image: jwilder/nginx-proxy:alpine
-    build: ../..
+    image: teambun/nginx-proxy-static
     restart: always
     ports:
-      - 880:80
-      - 8443:443
-    logging:
-      driver: journald
+      - "80:80"
+      - "443:443"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - nginx-vhost:/etc/nginx/vhost.d

@@ -10,8 +10,7 @@ services:
     expose:
       - 3000
   nginx:
-    build:
-      context: ../..
+    image: teambun/nginx-proxy-static
     ports:
       - 80:80
     volumes:
